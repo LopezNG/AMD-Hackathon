@@ -1,0 +1,30 @@
+[
+  {
+    "id": "sch_001",
+    "time": "8:10 AM",
+    "course": "Calculus AB",
+    "room": "Room 302",
+    "teacher": "Marcus Lee"
+  },
+  {
+    "id": "sch_002",
+    "time": "9:20 AM",
+    "course": "Biology 101",
+    "room": "Lab 3",
+    "teacher": "Dr. Naomi Patel"
+  },
+  {
+    "id": "sch_003",
+    "time": "11:05 AM",
+    "course": "English Literature",
+    "room": "Room 119",
+    "teacher": "Evelyn Brooks"
+  },
+  {
+    "id": "sch_004",
+    "time": "1:15 PM",
+    "course": "World History",
+    "room": "Room 221",
+    "teacher": "Owen Mitchell"
+  }
+]

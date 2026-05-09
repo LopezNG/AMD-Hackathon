@@ -1,0 +1,42 @@
+[
+  {
+    "id": "bio101",
+    "name": "Biology 101",
+    "teacher": "Dr. Naomi Patel",
+    "room": "Lab 3",
+    "currentGrade": 91,
+    "progress": 72,
+    "status": "on track",
+    "nextTopic": "Cellular respiration lab"
+  },
+  {
+    "id": "calcab",
+    "name": "Calculus AB",
+    "teacher": "Marcus Lee",
+    "room": "Room 302",
+    "currentGrade": 86,
+    "progress": 68,
+    "status": "watch",
+    "nextTopic": "Applications of derivatives"
+  },
+  {
+    "id": "englit",
+    "name": "English Literature",
+    "teacher": "Evelyn Brooks",
+    "room": "Room 119",
+    "currentGrade": 94,
+    "progress": 81,
+    "status": "strong",
+    "nextTopic": "Modernist poetry seminar"
+  },
+  {
+    "id": "worldhist",
+    "name": "World History",
+    "teacher": "Owen Mitchell",
+    "room": "Room 221",
+    "currentGrade": 88,
+    "progress": 65,
+    "status": "on track",
+    "nextTopic": "Cold War primary sources"
+  }
+]

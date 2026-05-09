@@ -1,0 +1,30 @@
+[
+  {
+    "id": "int_001",
+    "theme": "Missed Deadline",
+    "agent": "Success Agent",
+    "recommendation": "Submit the Cold War Source Analysis today, then send a short note to Mr. Mitchell explaining the plan.",
+    "action": "Draft teacher message"
+  },
+  {
+    "id": "int_002",
+    "theme": "Commuter Fatigue",
+    "agent": "Pulse Agent",
+    "recommendation": "Move Calculus prep to the evening before and set a 7:35 AM arrival target for two days.",
+    "action": "Create morning plan"
+  },
+  {
+    "id": "int_003",
+    "theme": "Academic Burnout",
+    "agent": "Sense-Maker Agent",
+    "recommendation": "Use a 25-minute focus block for the Biology conclusion before starting the full lab report.",
+    "action": "Build study checklist"
+  },
+  {
+    "id": "int_004",
+    "theme": "Confusion About Assignment",
+    "agent": "Admin-Strategy Agent",
+    "recommendation": "Open the updated Biology rubric and verify the conclusion checklist before submission.",
+    "action": "Review rubric"
+  }
+]

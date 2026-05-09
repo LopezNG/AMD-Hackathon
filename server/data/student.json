@@ -1,0 +1,16 @@
+{
+  "id": "student_001",
+  "name": "Vince Carter",
+  "school": "Northgate Academy",
+  "grade": "Grade 11",
+  "section": "A",
+  "advisor": "Maya Hernandez",
+  "gpa": 3.84,
+  "attendanceRate": 96,
+  "creditsEarned": 21.5,
+  "creditsRequired": 28,
+  "homeroom": "Room 214",
+  "wellbeingScore": 78,
+  "riskLevel": "moderate",
+  "preferredSupport": "Short checklists and early deadline reminders"
+}

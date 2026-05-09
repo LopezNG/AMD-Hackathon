@@ -1,0 +1,52 @@
+[
+  {
+    "id": "asg_001",
+    "title": "Cellular Respiration Lab Report",
+    "courseId": "bio101",
+    "course": "Biology 101",
+    "dueDate": "2026-05-11",
+    "status": "due soon",
+    "priority": "high",
+    "estimatedMinutes": 75
+  },
+  {
+    "id": "asg_002",
+    "title": "Derivative Applications Problem Set",
+    "courseId": "calcab",
+    "course": "Calculus AB",
+    "dueDate": "2026-05-12",
+    "status": "upcoming",
+    "priority": "medium",
+    "estimatedMinutes": 50
+  },
+  {
+    "id": "asg_003",
+    "title": "Modernist Poetry Reflection",
+    "courseId": "englit",
+    "course": "English Literature",
+    "dueDate": "2026-05-14",
+    "status": "upcoming",
+    "priority": "medium",
+    "estimatedMinutes": 40
+  },
+  {
+    "id": "asg_004",
+    "title": "Cold War Source Analysis",
+    "courseId": "worldhist",
+    "course": "World History",
+    "dueDate": "2026-05-08",
+    "status": "overdue",
+    "priority": "high",
+    "estimatedMinutes": 35
+  },
+  {
+    "id": "asg_005",
+    "title": "Weekly Reading Journal",
+    "courseId": "englit",
+    "course": "English Literature",
+    "dueDate": "2026-05-09",
+    "status": "completed",
+    "priority": "low",
+    "estimatedMinutes": 20
+  }
+]

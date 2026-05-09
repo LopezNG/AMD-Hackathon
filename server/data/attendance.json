@@ -1,0 +1,14 @@
+{
+  "studentId": "student_001",
+  "rate": 96,
+  "absences": 3,
+  "tardies": 5,
+  "trend": "Two late arrivals in the last 10 school days",
+  "riskNote": "Morning commute fatigue may affect first-period performance.",
+  "byCourse": [
+    { "course": "Biology 101", "present": 28, "missed": 1 },
+    { "course": "Calculus AB", "present": 27, "missed": 2 },
+    { "course": "English Literature", "present": 30, "missed": 0 },
+    { "course": "World History", "present": 29, "missed": 0 }
+  ]
+}

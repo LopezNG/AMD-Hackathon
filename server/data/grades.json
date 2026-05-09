@@ -1,0 +1,38 @@
+[
+  {
+    "courseId": "bio101",
+    "course": "Biology 101",
+    "average": 91,
+    "recent": [
+      { "name": "Photosynthesis Quiz", "score": 93 },
+      { "name": "Lab Notebook Check", "score": 88 }
+    ]
+  },
+  {
+    "courseId": "calcab",
+    "course": "Calculus AB",
+    "average": 86,
+    "recent": [
+      { "name": "Implicit Differentiation Quiz", "score": 82 },
+      { "name": "Limits Review", "score": 90 }
+    ]
+  },
+  {
+    "courseId": "englit",
+    "course": "English Literature",
+    "average": 94,
+    "recent": [
+      { "name": "Seminar Notes", "score": 96 },
+      { "name": "Timed Essay", "score": 92 }
+    ]
+  },
+  {
+    "courseId": "worldhist",
+    "course": "World History",
+    "average": 88,
+    "recent": [
+      { "name": "Debate Prep", "score": 91 },
+      { "name": "Map Quiz", "score": 84 }
+    ]
+  }
+]

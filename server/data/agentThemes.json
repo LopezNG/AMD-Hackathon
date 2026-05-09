@@ -1,0 +1,26 @@
+[
+  {
+    "agent": "Pulse Agent",
+    "theme": "Commuter Fatigue",
+    "signal": "Recent morning tardies",
+    "tone": "supportive"
+  },
+  {
+    "agent": "Sense-Maker Agent",
+    "theme": "Academic Burnout",
+    "signal": "High workload clustered early this week",
+    "tone": "reflective"
+  },
+  {
+    "agent": "Success Agent",
+    "theme": "Missed Deadline",
+    "signal": "One overdue World History assignment",
+    "tone": "action-oriented"
+  },
+  {
+    "agent": "Admin-Strategy Agent",
+    "theme": "Confusion About Assignment",
+    "signal": "Rubric update announcement",
+    "tone": "procedural"
+  }
+]

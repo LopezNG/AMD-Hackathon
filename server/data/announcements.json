@@ -1,0 +1,23 @@
+[
+  {
+    "id": "ann_001",
+    "source": "Northgate Academy",
+    "title": "Midterm support lab open after school",
+    "body": "Tutoring is available Monday through Thursday in the library from 3:20 PM.",
+    "date": "2026-05-09T08:30:00"
+  },
+  {
+    "id": "ann_002",
+    "source": "Biology 101",
+    "title": "Lab report rubric updated",
+    "body": "Use the revised conclusion checklist before submitting the cellular respiration report.",
+    "date": "2026-05-08T16:15:00"
+  },
+  {
+    "id": "ann_003",
+    "source": "Student Success Office",
+    "title": "Wellbeing check-in window",
+    "body": "Students can book a 10-minute planning check-in with their advisor this week.",
+    "date": "2026-05-07T11:00:00"
+  }
+]
