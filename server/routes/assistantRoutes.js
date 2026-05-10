@@ -12,7 +12,7 @@ export default function createAssistantRoutes({ assistantEngine, loadContext }) 
       }
 
       const context = await loadContext();
-      const response = assistantEngine.buildReply(message, context);
+      const response = await assistantEngine.buildReply(message, context);
 
       res.json({
         id: `msg_${Date.now()}`,

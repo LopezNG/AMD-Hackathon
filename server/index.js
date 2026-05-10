@@ -3,16 +3,17 @@ import express from 'express';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import RuleBasedAssistantEngine from './assistant/RuleBasedAssistantEngine.js';
+import AssistantEngine from './assistant/AssistantEngine.js';
 import createAssistantRoutes from './routes/assistantRoutes.js';
 import createStudentRoutes from './routes/studentRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const dataDir = path.join(__dirname, 'data');
+const clientDistDir = path.join(__dirname, '..', 'dist');
 const app = express();
 const port = process.env.PORT || 3001;
-const assistantEngine = new RuleBasedAssistantEngine();
+const assistantEngine = new AssistantEngine();
 
 app.use(cors());
 app.use(express.json());
@@ -40,6 +41,16 @@ async function loadContext() {
 
 app.use('/api', createStudentRoutes({ readJson }));
 app.use('/api', createAssistantRoutes({ assistantEngine, loadContext }));
+
+app.use(express.static(clientDistDir));
+
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return next();
+  }
+
+  return res.sendFile(path.join(clientDistDir, 'index.html'));
+});
 
 app.use((error, _req, res, _next) => {
   console.error(error);
