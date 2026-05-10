@@ -77,6 +77,9 @@ The model names above are configured in `server/assistant/agents/*.js`. They are
 | Assistant provider | Ollama local generation with rule-based fallback |
 | Dev orchestration | `concurrently` |
 
+## Agent Overview
+![image alt](https://github.com/LopezNG/EduSense/blob/2f4fe29dbb93614012512669ff399a373e3350d7/Multi-Agent%20System%20Overview.png)
+
 ## Project Structure
 
 ```text
