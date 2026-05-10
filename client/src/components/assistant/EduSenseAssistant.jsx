@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ChevronRight, Mic, Minus, Paperclip, SendHorizontal, Sparkles, X } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Archive, ChevronRight, Mic, Minus, Paperclip, SendHorizontal, Sparkles, Trash2, X } from 'lucide-react';
 import { sendAssistantMessage } from '../../services/api.js';
 import { agentStyles } from '../dashboard/styles.jsx';
 
 export default function EduSenseAssistant({ student, onClose, onMinimize }) {
+  const chatStorageKey = 'edusense-popup-chat-v1';
+  const archiveStorageKey = 'edusense-popup-chat-archive-v1';
   const initialMessages = useMemo(
     () => [
       {
@@ -31,15 +33,57 @@ export default function EduSenseAssistant({ student, onClose, onMinimize }) {
     [student?.name]
   );
   const [messages, setMessages] = useState(() => {
-    const saved = localStorage.getItem('edusense-popup-chat-v1');
-    return saved ? JSON.parse(saved) : initialMessages;
+    try {
+      const saved = localStorage.getItem(chatStorageKey);
+      return saved ? JSON.parse(saved) : initialMessages;
+    } catch {
+      return initialMessages;
+    }
   });
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const inputRef = useRef(null);
 
   useEffect(() => {
-    localStorage.setItem('edusense-popup-chat-v1', JSON.stringify(messages));
+    localStorage.setItem(chatStorageKey, JSON.stringify(messages));
   }, [messages]);
+
+  useEffect(() => {
+    if (!inputRef.current) return;
+    inputRef.current.style.height = '0px';
+    inputRef.current.style.height = `${Math.min(inputRef.current.scrollHeight, 144)}px`;
+  }, [input]);
+
+  function resetChat(nextMessages = initialMessages) {
+    setInput('');
+    setMessages(nextMessages);
+  }
+
+  function clearChat() {
+    if (loading) return;
+    resetChat([]);
+  }
+
+  function archiveChat() {
+    if (loading) return;
+
+    const archiveEntry = {
+      id: crypto.randomUUID?.() ?? `archive-${Date.now()}`,
+      archivedAt: new Date().toISOString(),
+      studentId: student?.id,
+      messages
+    };
+
+    try {
+      const savedArchive = localStorage.getItem(archiveStorageKey);
+      const archive = savedArchive ? JSON.parse(savedArchive) : [];
+      localStorage.setItem(archiveStorageKey, JSON.stringify([archiveEntry, ...(Array.isArray(archive) ? archive : [])]));
+    } catch {
+      localStorage.setItem(archiveStorageKey, JSON.stringify([archiveEntry]));
+    }
+
+    resetChat();
+  }
 
   async function sendMessage(text) {
     const trimmed = text.trim();
@@ -92,6 +136,12 @@ export default function EduSenseAssistant({ student, onClose, onMinimize }) {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <button className="rounded-lg border border-white/20 bg-white/10 p-2 text-white hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50" onClick={archiveChat} disabled={loading} aria-label="Archive chat">
+              <Archive size={17} />
+            </button>
+            <button className="rounded-lg border border-white/20 bg-white/10 p-2 text-white hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50" onClick={clearChat} disabled={loading} aria-label="Clear chat">
+              <Trash2 size={17} />
+            </button>
             <button className="rounded-lg border border-white/20 bg-white/10 p-2 text-white hover:bg-white/20" onClick={onMinimize} aria-label="Minimize assistant">
               <Minus size={17} />
             </button>
@@ -152,17 +202,25 @@ export default function EduSenseAssistant({ student, onClose, onMinimize }) {
           ))}
         </div>
         <form
-          className="flex items-center gap-2"
+          className="flex items-end gap-2"
           onSubmit={(event) => {
             event.preventDefault();
             sendMessage(input);
           }}
         >
-          <input
-            className="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-edu-teal focus:ring-2 focus:ring-edu-teal/20"
+          <textarea
+            ref={inputRef}
+            className="max-h-36 min-h-10 min-w-0 flex-1 resize-none overflow-y-auto rounded-lg border border-slate-200 px-3 py-2 text-sm leading-5 outline-none focus:border-edu-teal focus:ring-2 focus:ring-edu-teal/20"
             value={input}
             onChange={(event) => setInput(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage(input);
+              }
+            }}
             placeholder="Type your response here..."
+            rows={1}
           />
           <button className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-slate-200 text-slate-600 hover:border-edu-teal hover:text-edu-teal" type="button" aria-label="Attach file">
             <Paperclip size={18} />
