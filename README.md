@@ -12,6 +12,16 @@ The LMS is intentionally mock-only. It exists to demonstrate how an assistant ca
 - Local JSON data
 - Rule-based assistant endpoint designed for later LLM replacement
 
+## Structure
+
+- `client/src/components/dashboard` - student metrics and dashboard panels
+- `client/src/components/assistant` - floating EduSense chat UI
+- `client/src/components/layout` - shared dashboard shell and navigation
+- `client/src/services/api.js` - centralized client API calls
+- `server/routes` - Express request/response handlers
+- `server/assistant` - assistant intent, theme, and response logic
+- `server/data` - JSON mock database
+
 ## Run
 
 ```bash
