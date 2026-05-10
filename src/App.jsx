@@ -11,8 +11,12 @@ import {
   LayoutDashboard,
   Library,
   Menu,
+  Mic,
+  Minus,
+  Paperclip,
   MessageSquareText,
   Search,
+  SendHorizontal,
   ShieldCheck,
   Sparkles,
   TrendingUp,
@@ -60,7 +64,7 @@ function Stat({ label, value, helper, icon: Icon }) {
   );
 }
 
-function DashboardLayout({ student, children, assistant }) {
+function DashboardLayout({ student, children }) {
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
   const nav = [
@@ -133,19 +137,21 @@ function DashboardLayout({ student, children, assistant }) {
           </div>
         </header>
 
-        <main className="grid gap-5 px-4 py-5 md:px-6 xl:grid-cols-[minmax(0,1fr)_420px]">
-          <div className="min-w-0 space-y-5">{children}</div>
-          <div className="hidden xl:block">{assistant}</div>
+        <main className="px-4 py-5 md:px-6">
+          <div className="mx-auto min-w-0 max-w-7xl space-y-5">{children}</div>
         </main>
       </div>
 
-      <button
-        className="fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-lg bg-edu-teal px-4 py-3 text-sm font-bold text-white shadow-soft xl:hidden"
-        onClick={() => setAssistantOpen(true)}
-      >
-        <Sparkles size={18} />
-        EduSense
-      </button>
+      {!assistantOpen && (
+        <button
+          className="fixed bottom-5 right-5 z-40 grid h-16 w-16 place-items-center rounded-full bg-gradient-to-br from-edu-teal to-navy-700 text-white shadow-[0_18px_45px_rgba(19,168,162,0.35)] transition hover:scale-105 focus:outline-none focus:ring-4 focus:ring-edu-teal/25"
+          onClick={() => setAssistantOpen(true)}
+          aria-label="Open EduSense assistant"
+        >
+          <Sparkles size={27} />
+          <span className="absolute right-1.5 top-1.5 h-4 w-4 rounded-full border-2 border-white bg-emerald-400" />
+        </button>
+      )}
 
       {navOpen && (
         <div className="fixed inset-0 z-50 bg-navy-900/40 lg:hidden">
@@ -182,16 +188,13 @@ function DashboardLayout({ student, children, assistant }) {
       )}
 
       {assistantOpen && (
-        <div className="fixed inset-0 z-50 bg-navy-900/40 xl:hidden">
-          <div className="ml-auto flex h-full max-w-[440px] flex-col bg-white shadow-soft">
-            <div className="flex items-center justify-between border-b border-slate-200 p-4">
-              <p className="font-bold text-navy-900">EduSense Assistant</p>
-              <button className="rounded-lg border border-slate-200 p-2" onClick={() => setAssistantOpen(false)} aria-label="Close assistant">
-                <X size={18} />
-              </button>
-            </div>
-            <div className="min-h-0 flex-1 p-4">{assistant}</div>
-          </div>
+        <div className="fixed inset-0 z-50 pointer-events-none">
+          <button
+            className="pointer-events-auto absolute inset-0 bg-navy-900/40 md:hidden"
+            onClick={() => setAssistantOpen(false)}
+            aria-label="Close assistant backdrop"
+          />
+          <EduSenseAssistant student={student} onClose={() => setAssistantOpen(false)} onMinimize={() => setAssistantOpen(false)} />
         </div>
       )}
     </div>
@@ -348,27 +351,42 @@ function AgentActivityPanel({ themes }) {
   );
 }
 
-function EduSenseAssistant({ student }) {
+function EduSenseAssistant({ student, onClose, onMinimize }) {
   const initialMessages = useMemo(
     () => [
       {
         role: 'assistant',
+        agent: 'Pulse Agent',
+        content: `Hi ${student?.name ?? 'Sarah'}! I noticed you were not able to make it to Advanced Calculus again this morning. Everything okay? We missed you.`
+      },
+      {
+        role: 'user',
+        content: 'I had to leave home really early, but the bus was delayed again. By the time I got to campus, class was almost over.'
+      },
+      {
+        role: 'assistant',
         agent: 'Sense-Maker Agent',
-        content: `Hi ${student?.name ?? 'Vince'}, I can help interpret your courses, deadlines, grades, attendance, and support signals from Northgate Academy.`,
-        actions: [{ title: 'Suggested start', detail: 'Ask what is due this week' }]
+        tag: 'Identified: Commuter Fatigue',
+        content: 'Repeated morning absences line up with travel disruption rather than disengagement. Attendance support should focus on schedule friction and recovery access.'
+      },
+      {
+        role: 'assistant',
+        agent: 'Success Agent',
+        content: 'Recommendation: send Dr. Kim a context note, unlock the recorded lecture for today, and suggest a later office-hour slot before the quiz review.',
+        actions: [{ title: 'Draft advisor update', detail: 'Share attendance context and recommended calculus catch-up plan' }]
       }
     ],
     [student?.name]
   );
   const [messages, setMessages] = useState(() => {
-    const saved = localStorage.getItem('edusense-chat');
+    const saved = localStorage.getItem('edusense-popup-chat-v1');
     return saved ? JSON.parse(saved) : initialMessages;
   });
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('edusense-chat', JSON.stringify(messages));
+    localStorage.setItem('edusense-popup-chat-v1', JSON.stringify(messages));
   }, [messages]);
 
   async function sendMessage(text) {
@@ -408,48 +426,46 @@ function EduSenseAssistant({ student }) {
     }
   }
 
-  const suggestions = ['What assignments are due this week?', 'How are my grades?', 'Do I have attendance risks?', 'What changed in announcements?'];
+  const suggestions = ['Open lecture recording', 'Draft teacher note', 'Find later office hours'];
 
   return (
-    <Card className="flex h-[calc(100vh-112px)] min-h-[620px] flex-col overflow-hidden border-edu-teal/30 shadow-soft">
-      <div className="border-b border-slate-200 bg-gradient-to-r from-navy-900 to-navy-700 p-4 text-white">
+    <section className="pointer-events-auto fixed inset-x-3 bottom-3 z-50 flex h-[calc(100dvh-1.5rem)] flex-col overflow-hidden rounded-2xl border border-edu-teal/30 bg-white shadow-[0_26px_70px_rgba(15,31,61,0.24)] md:inset-auto md:bottom-6 md:right-6 md:h-[86vh] md:w-[410px] md:max-w-[calc(100vw-3rem)]">
+      <div className="border-b border-slate-200 bg-gradient-to-r from-edu-teal to-navy-700 p-4 text-white">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-lg bg-edu-teal">
+            <div className="relative grid h-11 w-11 place-items-center rounded-full bg-white/15 ring-1 ring-white/25">
               <Sparkles size={20} />
+              <span className="absolute -right-0.5 -top-0.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-emerald-400" />
             </div>
             <div>
-              <h2 className="font-bold">EduSense Assistant</h2>
-              <p className="text-sm text-blue-100">Connected to mock LMS context</p>
+              <h2 className="text-lg font-bold leading-tight">EduSense</h2>
+              <p className="text-sm text-blue-50">Your Success Partner</p>
             </div>
           </div>
-          <span className="rounded-md border border-white/20 bg-white/10 px-2 py-1 text-xs font-bold">Live prototype</span>
+          <div className="flex items-center gap-2">
+            <button className="rounded-lg border border-white/20 bg-white/10 p-2 text-white hover:bg-white/20" onClick={onMinimize} aria-label="Minimize assistant">
+              <Minus size={17} />
+            </button>
+            <button className="rounded-lg border border-white/20 bg-white/10 p-2 text-white hover:bg-white/20" onClick={onClose} aria-label="Close assistant">
+              <X size={17} />
+            </button>
+          </div>
         </div>
-        <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
-          <div className="rounded-lg bg-white/10 p-2">
-            <p className="font-bold">{student?.attendanceRate}%</p>
-            <p className="text-blue-100">Attendance</p>
-          </div>
-          <div className="rounded-lg bg-white/10 p-2">
-            <p className="font-bold">{student?.gpa}</p>
-            <p className="text-blue-100">GPA</p>
-          </div>
-          <div className="rounded-lg bg-white/10 p-2">
-            <p className="font-bold capitalize">{student?.riskLevel}</p>
-            <p className="text-blue-100">Risk</p>
-          </div>
+        <div className="mt-4 rounded-xl border border-white/20 bg-white/12 px-3 py-2 text-sm">
+          <span className="font-semibold">Context:</span> Attendance Check / Advanced Calculus
         </div>
       </div>
 
       <div className="scrollbar-slim flex-1 space-y-4 overflow-y-auto bg-slate-50 p-4">
         {messages.map((message, index) => (
           <div className={message.role === 'user' ? 'ml-8 flex justify-end' : 'mr-4'} key={`${message.role}-${index}`}>
-            <div className={`max-w-full rounded-lg border p-3 ${message.role === 'user' ? 'border-navy-700 bg-navy-800 text-white' : 'border-slate-200 bg-white text-slate-700'}`}>
+            <div className={`max-w-full rounded-2xl border p-3 shadow-sm ${message.role === 'user' ? 'border-navy-700 bg-navy-800 text-white' : 'border-slate-200 bg-white text-slate-700'}`}>
               {message.agent && (
                 <span className={`mb-2 inline-flex rounded-md border px-2 py-1 text-xs font-bold ${agentStyles[message.agent]}`}>
                   {message.agent}
                 </span>
               )}
+              {message.tag && <p className="mb-2 text-xs font-bold uppercase tracking-wide text-indigo-700">{message.tag}</p>}
               <p className="text-sm leading-6">{message.content}</p>
               {message.actions?.length > 0 && (
                 <div className="mt-3 space-y-2">
@@ -487,7 +503,7 @@ function EduSenseAssistant({ student }) {
           ))}
         </div>
         <form
-          className="flex gap-2"
+          className="flex items-center gap-2"
           onSubmit={(event) => {
             event.preventDefault();
             sendMessage(input);
@@ -497,14 +513,20 @@ function EduSenseAssistant({ student }) {
             className="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-edu-teal focus:ring-2 focus:ring-edu-teal/20"
             value={input}
             onChange={(event) => setInput(event.target.value)}
-            placeholder="Ask about deadlines, grades, attendance..."
+            placeholder="Type your response here..."
           />
-          <button className="rounded-lg bg-edu-teal px-4 py-2 text-sm font-bold text-white" type="submit">
-            Send
+          <button className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-slate-200 text-slate-600 hover:border-edu-teal hover:text-edu-teal" type="button" aria-label="Attach file">
+            <Paperclip size={18} />
+          </button>
+          <button className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-slate-200 text-slate-600 hover:border-edu-teal hover:text-edu-teal" type="button" aria-label="Use microphone">
+            <Mic size={18} />
+          </button>
+          <button className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-edu-teal text-white hover:bg-navy-700" type="submit" aria-label="Send response">
+            <SendHorizontal size={18} />
           </button>
         </form>
       </div>
-    </Card>
+    </section>
   );
 }
 
@@ -545,7 +567,7 @@ export default function App() {
   }
 
   return (
-    <DashboardLayout student={data.student} assistant={<EduSenseAssistant student={data.student} />}>
+    <DashboardLayout student={data.student}>
       <StudentOverview student={data.student} assignments={data.assignments} />
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]">
         <CoursesList courses={data.courses} />
